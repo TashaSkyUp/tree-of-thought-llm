@@ -8,5 +8,8 @@ def get_task(name, file=None):
     elif name == 'crosswords':
         from .crosswords import MiniCrosswordsTask
         return MiniCrosswordsTask(file)
+    elif name == 'generic':
+        from .generic import GenericTask
+        return GenericTask(file)
     else:
         raise NotImplementedError

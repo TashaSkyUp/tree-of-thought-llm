@@ -90,3 +90,16 @@ class Game24Task(Task):
         value_map = {'impossible': 0.001, 'likely': 1, 'sure': 20}  # TODO: ad hoc
         value = sum(value * value_names.count(name) for name, value in value_map.items())
         return value
+
+    def generate_prompt(self, input_data: str, method: str) -> str:
+        if method == 'standard':
+            return self.standard_prompt_wrap(input_data)
+        elif method == 'cot':
+            return self.cot_prompt_wrap(input_data)
+        elif method == 'propose':
+            return self.propose_prompt_wrap(input_data)
+        else:
+            raise ValueError(f'Unknown method: {method}')
+
+    def evaluate_output(self, input_data: str, output_data: str) -> dict:
+        return self.test_output(input_data, output_data)

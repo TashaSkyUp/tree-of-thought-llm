@@ -254,3 +254,16 @@ class MiniCrosswordsTask(Task):
             if res in count: count[res] += 1
         print(count)
         return count
+
+    def generate_prompt(self, input_data: str, method: str) -> str:
+        if method == 'standard':
+            return self.standard_prompt_wrap(input_data)
+        elif method == 'cot':
+            return self.cot_prompt_wrap(input_data)
+        elif method == 'propose':
+            return self.propose_prompt_wrap(input_data)
+        else:
+            raise ValueError(f'Unknown method: {method}')
+
+    def evaluate_output(self, input_data: str, output_data: str) -> dict:
+        return self.test_output(input_data, output_data)

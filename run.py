@@ -41,12 +41,7 @@ def get_proposals(task, x, y):
     return [y + _ + '\n' for _ in proposals]
 
 def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
-    if prompt_sample == 'standard':
-        prompt = task.standard_prompt_wrap(x, y)
-    elif prompt_sample == 'cot':
-        prompt = task.cot_prompt_wrap(x, y)
-    else:
-        raise ValueError(f'prompt_sample {prompt_sample} not recognized')
+    prompt = task.generate_prompt(x, prompt_sample)
     samples = gpt(prompt, n=n_generate_sample, stop=stop)
     return [y + _ for _ in samples]
 
@@ -113,7 +108,7 @@ def run(args):
             ys, info = solve(args, task, i)
 
         # log
-        infos = [task.test_output(i, y) for y in ys]
+        infos = [task.evaluate_output(i, y) for y in ys]
         info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)})
         logs.append(info)
         with open(file, 'w') as f:
@@ -135,7 +130,7 @@ def parse_args():
     args.add_argument('--backend', type=str, choices=['gpt-4', 'gpt-3.5-turbo'], default='gpt-4')
     args.add_argument('--temperature', type=float, default=0.7)
 
-    args.add_argument('--task', type=str, required=True, choices=['game24', 'text', 'crosswords'])
+    args.add_argument('--task', type=str, required=True, choices=['game24', 'text', 'crosswords', 'generic'])
     args.add_argument('--task_file_path', type=str, required=True)
     args.add_argument('--task_start_index', type=int, default=900)
     args.add_argument('--task_end_index', type=int, default=1000)

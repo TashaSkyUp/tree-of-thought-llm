@@ -12,3 +12,14 @@ class Task:
 
     def test_output(self, idx: int, output: str):
         pass
+
+    def generate_prompt(self, input_data: str, method: str) -> str:
+        if method == 'standard':
+            return self.standard_prompt_wrap(input_data)
+        elif method == 'cot':
+            return self.cot_prompt_wrap(input_data)
+        else:
+            raise ValueError(f'Unknown method: {method}')
+
+    def evaluate_output(self, input_data: str, output_data: str) -> dict:
+        return self.test_output(input_data, output_data)
