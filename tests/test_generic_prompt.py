@@ -49,5 +49,17 @@ class TestGenericTask(unittest.TestCase):
         expected_output = {'r': 1}
         self.assertEqual(self.task.evaluate_output(input_data, output_data), expected_output)
 
+    def test_cot_intermediate_steps(self):
+        input_data = "This is a test prompt."
+        cot_output = self.task.generate_prompt(input_data, 'cot')
+        self.assertIn("Plan:", cot_output)
+        self.assertIn("Response:", cot_output)
+
+    def test_cot_intermediate_steps_multiple(self):
+        input_data = "This is another test prompt."
+        cot_output = self.task.generate_prompt(input_data, 'cot')
+        self.assertIn("Plan:", cot_output)
+        self.assertIn("Response:", cot_output)
+
 if __name__ == '__main__':
     unittest.main()
